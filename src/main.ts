@@ -37,7 +37,6 @@ async function bootstrap() {
     .setTitle('API Documentation')
     .setDescription('API documentation for the NestJS application.')
     .setVersion('1.0')
-    .addTag('auth', 'Authentication related endpoints')
     .addBearerAuth(
       {
         type: 'http',

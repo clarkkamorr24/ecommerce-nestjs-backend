@@ -89,10 +89,6 @@ export class CategoryController {
       },
     },
   })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized.',
-  })
   async findAll(@Query() queryDto: QueryCategoryDto) {
     return await this.categoryService.findAll(queryDto);
   }
@@ -104,10 +100,6 @@ export class CategoryController {
     status: 200,
     description: 'Category details',
     type: CategoryResponseDto,
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized.',
   })
   @ApiResponse({
     status: 404,
@@ -125,14 +117,6 @@ export class CategoryController {
     description: 'Category details',
     type: CategoryResponseDto,
   })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized.',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Category not found',
-  })
   async findBySlug(@Param('slug') slug: string): Promise<CategoryResponseDto> {
     return await this.categoryService.findBySlug(slug);
   }
@@ -149,20 +133,16 @@ export class CategoryController {
     description: 'Category has been successfully updated.',
   })
   @ApiResponse({
-    status: 400,
-    description: 'Invalid input data',
-  })
-  @ApiResponse({
     status: 401,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Forbidden',
+    description: 'Unauthorized.',
   })
   @ApiResponse({
     status: 404,
     description: 'Category not found',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Slug already exists.',
   })
   async update(
     @Param('id') id: string,
@@ -181,6 +161,10 @@ export class CategoryController {
   @ApiResponse({
     status: 200,
     description: 'Category with the specified ID deleted successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Cannot delete category with products',
   })
   @ApiResponse({
     status: 401,

@@ -10,8 +10,8 @@ import { Transform, Type } from 'class-transformer';
 
 export class QueryProductDto {
   @ApiPropertyOptional({
-    example: 'Electronics',
-    description: 'Filter by category',
+    description: 'Filter by category (must be the ID)',
+    example: 'c1a2b3c4-d5e6-f7g8-9h10-a1b2c3d4e5f6',
   })
   @IsString()
   @IsOptional()

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -25,6 +26,8 @@ export class CreateProductDto {
     description: 'The description of the product',
     required: false,
   })
+  @IsString()
+  @IsOptional()
   description?: string;
 
   @ApiProperty({
@@ -68,7 +71,7 @@ export class CreateProductDto {
 
   @ApiProperty({
     description: 'Product category',
-    example: 'Electronics',
+    example: 'c1a2b3c4-d5e6-f7g8-9h10-a1b2c3d4e5f6',
     required: true,
   })
   @IsString()
@@ -80,5 +83,7 @@ export class CreateProductDto {
     default: true,
     required: false,
   })
+  @IsBoolean()
+  @IsOptional()
   isActive?: boolean;
 }

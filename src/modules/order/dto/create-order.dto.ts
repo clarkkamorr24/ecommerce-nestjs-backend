@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -17,7 +18,8 @@ class OrderItemDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
+  @Min(1)
   quantity: number;
 
   @ApiProperty({

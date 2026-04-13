@@ -331,7 +331,7 @@ export class OrderService {
   ): OrderApiResponseDto<OrderResponseDto> {
     return {
       success: true,
-      message: 'Order created successfully',
+      message: 'Order retreived successfully',
       data: this.map(order),
     };
   }

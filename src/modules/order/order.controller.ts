@@ -23,7 +23,6 @@ import {
   ApiResponse,
   ApiTags,
   ApiTooManyRequestsResponse,
-  getSchemaPath,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
@@ -43,6 +42,7 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 import { Role } from '@prisma/client';
 import { QueryOrderDto } from './dto/query-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
 
 @ApiTags('Orders')
 @ApiBearerAuth('JWT-auth')
@@ -73,42 +73,14 @@ export class OrderController {
   }
 
   // get all orders for admin
-
   @Get('/admin/all')
   @Roles(Role.ADMIN)
   @RelaxedThrottle()
   @ApiOperation({ summary: 'Get all orders for Admin role (paginated)' })
-  @ApiQuery({
-    name: 'status',
-    required: false,
-    type: String,
-  })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'limit',
-    required: false,
-    type: Number,
-  })
   @ApiResponse({
-    description: 'List of orders',
-    schema: {
-      type: 'object',
-      properties: {
-        data: {
-          type: 'array',
-          items: {
-            $ref: getSchemaPath(OrderResponseDto),
-          },
-        },
-        total: { type: 'number' },
-        page: { type: 'number' },
-        limit: { type: 'number' },
-      },
-    },
+    status: 200,
+    description: 'List of all orders',
+    type: PaginatedResponseDto(OrderResponseDto),
   })
   @ApiForbiddenResponse({
     description: 'Admin access required',

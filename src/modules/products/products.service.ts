@@ -10,6 +10,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { Category, Prisma, Product } from '@prisma/client';
 import { QueryProductDto } from './dto/query-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { PaginatedResult } from 'src/common/dto/paginated-response.dto';
 
 @Injectable()
 export class ProductsService {
@@ -37,10 +38,9 @@ export class ProductsService {
     return this.formatProduct(product);
   }
 
-  async findAll(queryDto: QueryProductDto): Promise<{
-    data: ProductResponseDto[];
-    meta: { total: number; page: number; limit: number; totalPages: number };
-  }> {
+  async findAll(
+    queryDto: QueryProductDto,
+  ): Promise<PaginatedResult<ProductResponseDto>> {
     const { category, isActive, search, page = 1, limit = 10 } = queryDto;
 
     const where: Prisma.ProductWhereInput = {};

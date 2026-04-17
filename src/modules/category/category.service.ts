@@ -10,6 +10,7 @@ import { CategoryResponseDto } from './dto/category-response.dto';
 import { Category, Prisma } from '@prisma/client';
 import { QueryCategoryDto } from './dto/query-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { PaginatedResult } from 'src/common/dto/paginated-response.dto';
 
 @Injectable()
 export class CategoryService {
@@ -46,10 +47,9 @@ export class CategoryService {
     return this.formatCategory(category, 0);
   }
 
-  async findAll(queryDto: QueryCategoryDto): Promise<{
-    data: CategoryResponseDto[];
-    meta: { total: number; page: number; limit: number; totalPages: number };
-  }> {
+  async findAll(
+    queryDto: QueryCategoryDto,
+  ): Promise<PaginatedResult<CategoryResponseDto>> {
     const { isActive, search, page, limit } = queryDto;
 
     const where: Prisma.CategoryWhereInput = {};

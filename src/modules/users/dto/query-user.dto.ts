@@ -1,28 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
-export enum OrderStatus {
-  PENDING = 'PENDING',
-  PROCESSING = 'PROCESSING',
-  SHIPPED = 'SHIPPED',
-  DELIVERED = 'DELIVERED',
-  CANCELLED = 'CANCELLED',
-}
-
-export class QueryOrderDto {
+export class QueryUserDto {
   @ApiPropertyOptional({
-    description: 'Filter by status',
-    enum: OrderStatus,
-    example: OrderStatus.PENDING,
-  })
-  @IsOptional()
-  @Type(() => String)
-  status?: OrderStatus;
-
-  @ApiPropertyOptional({
-    description: 'Search term to filter order id or order number',
-    example: '123',
+    description: 'Search term to filter user first name, last name or email',
+    example: 'John',
   })
   @IsOptional()
   @IsString()

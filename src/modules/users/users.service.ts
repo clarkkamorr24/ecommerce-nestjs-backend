@@ -8,6 +8,9 @@ import { UserResponseDto } from './dto/user-response.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import * as bcrypt from 'bcrypt';
+import { User, Prisma } from '@prisma/client';
+import { QueryUserDto } from './dto/query-user.dto';
+import { PaginatedResult } from 'src/common/dto/paginated-response.dto';
 
 @Injectable()
 export class UserService {
@@ -36,24 +39,40 @@ export class UserService {
     return user;
   }
 
-  async findAll(): Promise<UserResponseDto[]> {
+  async findAll(
+    queryDto: QueryUserDto,
+  ): Promise<PaginatedResult<UserResponseDto>> {
+    const { search, page = 1, limit = 10 } = queryDto;
+
+    const where: Prisma.UserWhereInput = {};
+
+    if (search) {
+      where.OR = [
+        { email: { contains: search, mode: 'insensitive' } },
+        { firstName: { contains: search, mode: 'insensitive' } },
+        { lastName: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    const total = await this.prisma.user.count({ where });
+
     const users = await this.prisma.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-        password: false,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      where,
+      take: limit,
+      skip: (page - 1) * limit,
+      orderBy: { createdAt: 'desc' },
+      omit: { password: true, refreshToken: true },
     });
 
-    return users;
+    return {
+      data: users.map((user) => this.formatUser(user)),
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async update(
@@ -142,5 +161,12 @@ export class UserService {
     await this.prisma.user.delete({ where: { id: userId } });
 
     return { message: 'User account deleted successfully' };
+  }
+
+  // Helper method to format user response
+  private formatUser(
+    user: Omit<User, 'password' | 'refreshToken'>,
+  ): UserResponseDto {
+    return user;
   }
 }

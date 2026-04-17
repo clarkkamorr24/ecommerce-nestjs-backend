@@ -27,6 +27,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { CategoryResponseDto } from './dto/category-response.dto';
 import { QueryCategoryDto } from './dto/query-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -68,26 +69,7 @@ export class CategoryController {
   @ApiResponse({
     status: 200,
     description: 'List of all categories',
-    schema: {
-      type: 'object',
-      properties: {
-        data: {
-          type: 'array',
-          items: {
-            $ref: '#/components/schemas/CategoryResponseDto',
-          },
-        },
-        meta: {
-          type: 'object',
-          properties: {
-            total: { type: 'number' },
-            page: { type: 'number' },
-            limit: { type: 'number' },
-            totalPages: { type: 'number' },
-          },
-        },
-      },
-    },
+    type: PaginatedResponseDto(CategoryResponseDto),
   })
   async findAll(@Query() queryDto: QueryCategoryDto) {
     return await this.categoryService.findAll(queryDto);

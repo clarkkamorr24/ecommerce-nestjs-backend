@@ -40,7 +40,7 @@ export class QueryCategoryDto {
   @IsNumber()
   @Min(1)
   @IsOptional()
-  page = 1;
+  page: number = 1;
 
   @ApiPropertyOptional({
     description: 'Number of items per page for pagination',
@@ -52,5 +52,5 @@ export class QueryCategoryDto {
   @IsNumber()
   @Min(1)
   @IsOptional()
-  limit = 10;
+  limit: number = 10;
 }

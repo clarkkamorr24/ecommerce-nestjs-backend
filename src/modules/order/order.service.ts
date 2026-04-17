@@ -19,6 +19,7 @@ import {
 } from '@prisma/client';
 import { QueryOrderDto } from './dto/query-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { PaginatedResult } from 'src/common/dto/paginated-response.dto';
 
 @Injectable()
 export class OrderService {
@@ -122,12 +123,9 @@ export class OrderService {
     return this.wrap(order);
   }
 
-  async findAllForAdmin(queryDto: QueryOrderDto): Promise<{
-    data: OrderResponseDto[];
-    total: number;
-    page: number;
-    limit: number;
-  }> {
+  async findAllForAdmin(
+    queryDto: QueryOrderDto,
+  ): Promise<PaginatedResult<OrderResponseDto>> {
     const { page = 1, limit = 10, status, search } = queryDto;
     const skip = (page - 1) * limit;
 
@@ -164,9 +162,12 @@ export class OrderService {
 
     return {
       data: orders.map((order) => this.map(order)),
-      total,
-      page,
-      limit,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     };
   }
 

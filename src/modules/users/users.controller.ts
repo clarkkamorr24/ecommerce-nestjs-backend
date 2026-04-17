@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Patch,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -26,6 +27,8 @@ import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { QueryUserDto } from './dto/query-user.dto';
+import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth('JWT-auth')
@@ -57,14 +60,14 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'List of all users',
-    type: UserResponseDto,
+    type: PaginatedResponseDto(UserResponseDto),
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized.',
   })
-  async findAll(): Promise<UserResponseDto[]> {
-    return await this.userService.findAll();
+  async findAll(@Query() queryDto: QueryUserDto) {
+    return await this.userService.findAll(queryDto);
   }
 
   // get user by id (only for admin)

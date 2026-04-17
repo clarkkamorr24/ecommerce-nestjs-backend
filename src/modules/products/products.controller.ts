@@ -27,6 +27,7 @@ import { Role } from '@prisma/client';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { QueryProductDto } from './dto/query-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
 
 @ApiTags('Products')
 @Controller('products')
@@ -68,27 +69,8 @@ export class ProductsController {
   @ApiOperation({ summary: 'Get all products with optional filters' })
   @ApiResponse({
     status: 200,
-    description: 'List of products with pagination',
-    schema: {
-      type: 'object',
-      properties: {
-        data: {
-          type: 'array',
-          items: {
-            $ref: '#/components/schemas/ProductResponseDto',
-          },
-        },
-        meta: {
-          type: 'object',
-          properties: {
-            total: { type: 'number' },
-            page: { type: 'number' },
-            limit: { type: 'number' },
-            totalPages: { type: 'number' },
-          },
-        },
-      },
-    },
+    description: 'List of all products',
+    type: PaginatedResponseDto(ProductResponseDto),
   })
   async findAll(@Query() queryDto: QueryProductDto) {
     return await this.productsService.findAll(queryDto);

@@ -21,10 +21,10 @@ import { CreatePaymentIntentDto } from './dto/create-payment-intent.dto';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { ConfirmPaymentDto } from './dto/confirm-payment.dto';
 
-@ApiTags('Orders')
+@ApiTags('Payments')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('Payments')
+@Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 

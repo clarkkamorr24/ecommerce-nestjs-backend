@@ -34,7 +34,6 @@ import {
 import {
   OrderApiResponseDto,
   OrderResponseDto,
-  PaginatedOrderResponseDto,
 } from './dto/order-response.dto';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -100,7 +99,7 @@ export class OrderController {
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiOkResponse({
     description: 'List of user orders',
-    type: PaginatedOrderResponseDto,
+    type: PaginatedResponseDto(OrderResponseDto),
   })
   async findAll(
     @Query() queryDto: QueryOrderDto,

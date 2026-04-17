@@ -174,12 +174,7 @@ export class OrderService {
   async findAll(
     userId: string,
     queryDto: QueryOrderDto,
-  ): Promise<{
-    data: OrderResponseDto[];
-    total: number;
-    page: number;
-    limit: number;
-  }> {
+  ): Promise<PaginatedResult<OrderResponseDto>> {
     const { page = 1, limit = 10, status, search } = queryDto;
     const skip = (page - 1) * limit;
 
@@ -212,9 +207,12 @@ export class OrderService {
 
     return {
       data: orders.map((order) => this.map(order)),
-      total,
-      page,
-      limit,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     };
   }
 
